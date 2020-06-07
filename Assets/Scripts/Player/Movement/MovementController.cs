@@ -9,7 +9,7 @@ public class MovementController : MonoBehaviour {
 
     public void Start(){
         movement_model = new MovementModel();
-        GetComponent<Player>().input_controller.OnInputUpdate += Move;
+        InputController.OnInputUpdate += Move;
         character_controller = GetComponent<CharacterController>();
     }
 

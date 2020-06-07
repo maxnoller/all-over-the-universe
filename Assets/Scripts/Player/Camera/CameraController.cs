@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     {
         camera_model = new CameraModel();
         if(local_player.isLocalPlayer){
-            local_player.input_controller.OnInputUpdate += ChangeRotation;
+            InputController.OnInputUpdate += ChangeRotation;
         } else {
             gameObject.SetActive(false);
         }

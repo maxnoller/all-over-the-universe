@@ -16,6 +16,10 @@ public class InputModel : IInputData{
     
     public float delta_time{get;set;}
 
+    public bool has_used{get;set;}
+    public bool has_used_secondary{get;set;}
+    public bool has_reloaded{get;set;}
+
     public InputModel(){
         this.axis_horizontal = 0f;
         this.axis_vertical = 0f;

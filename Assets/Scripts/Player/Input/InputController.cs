@@ -6,7 +6,7 @@ using Mirror;
 
 public class InputController : NetworkBehaviour
 {
-    public event Action<IInputData> OnInputUpdate = delegate { };
+    public static event Action<IInputData> OnInputUpdate = delegate { };
     [SerializeField]IUnityService unityService;
 
     InputModel input_model;
@@ -27,6 +27,9 @@ public class InputController : NetworkBehaviour
         this.input_model.sneak_button = unityService.GetButton("Sneak");
         this.input_model.jump_button = unityService.GetButton("Jump");
         this.input_model.delta_time = unityService.GetDeltaTime();
+        this.input_model.has_used = unityService.GetButton("Fire1");
+        this.input_model.has_used_secondary = unityService.GetButton("Fire2");
+        this.input_model.has_reloaded = unityService.GetButton("Reload");
         OnInputUpdate(this.input_model);
     }
 
