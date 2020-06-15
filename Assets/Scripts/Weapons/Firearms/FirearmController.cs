@@ -2,37 +2,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class FirearmController : MonoBehaviour, IFirearmController
+public class FirearmController : NetworkBehaviour, IFirearmController
 {
-    [SerializeField]public FirearmData firearm_data{get;}
+    [SerializeField]private FirearmData firearm_data;
+    public FirearmData FirearmData{
+        get{return firearm_data;}
+    }
 
     //Events
     public event Action OnBulletShot = delegate { };
-    public event Action<FirearmController> OnAmmoChange = delegate { };
 
     public bool can_shoot{get;set;}
     ReloadBehaviour reload_behaviour;
-    List<IBehaviour> behaviours;
+
+    bool is_local_player = true;
 
     void Start(){
-        if(firearm_data.ammo_per_magazine != 0)
-            reload_behaviour = new ReloadBehaviour(this);
-            behaviours.Add(reload_behaviour);
+        can_shoot = true;
+        if(firearm_data.ammo_per_magazine != 0 && is_local_player){
+            reload_behaviour = GetComponent<ReloadBehaviour>();
+            reload_behaviour.Init(this);
+        }
+        RaycastController raycast_controller;
+        raycast_controller = GetComponent<RaycastController>();
+        raycast_controller.Init(this);    
     }
 
     void OnEnable(){
-        InputController.OnInputUpdate += checkInput;
-        foreach(IBehaviour behaviour in behaviours){
-            behaviour.OnEnableBehaviour();
-        }
+        if(is_local_player)
+            InputController.OnInputUpdate += checkInput;
     }
 
     void OnDisable(){
-        InputController.OnInputUpdate -= checkInput;
-        foreach(IBehaviour behaviour in behaviours){
-            behaviour.OnDisableBehaviour();
-        }
+        if(is_local_player)
+            InputController.OnInputUpdate -= checkInput;
+    }
+
+    void Init(bool is_local_player){
+        this.is_local_player = is_local_player;
     }
 
     void checkInput(IInputData input_data){
@@ -42,10 +51,14 @@ public class FirearmController : MonoBehaviour, IFirearmController
     }
     float next_fire;
     void shoot(){
-        if(can_shoot && Time.time >= next_fire){
-            next_fire = Time.time + 1f/fire_rate;
+        if(can_shoot && Time.time > next_fire){
+            next_fire = Time.time + 1f/firearm_data.fire_rate;
             OnBulletShot();
         }
+    }
+
+    public ReloadData getReloadData(){
+        return new ReloadData(this.firearm_data);
     }
 
 }

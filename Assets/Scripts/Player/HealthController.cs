@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class HealthController : NetworkBehaviour {
+public class HealthController : NetworkBehaviour, IDamageable {
     Player local_player;
     private const int max_health = 100;
     [SyncVar]public int health = max_health;

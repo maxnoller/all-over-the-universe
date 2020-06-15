@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Data", menuName = "Weapons/FirearmData")]
 public class FirearmData : ScriptableObject {
     [Header("General Weapon Stats")]
     public int damage;
@@ -11,6 +12,7 @@ public class FirearmData : ScriptableObject {
     [Header("Ammo stats")]
     public int total_ammo;
     public int ammo_per_magazine;
+    public float reload_time;
     [Header("Visual and Audio")]
     public AudioClip shot_audio_clip;
     public float shot_audio_volume = 1f;

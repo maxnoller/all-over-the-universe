@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public interface IFirearmController {
     event Action OnBulletShot;
-    FirearmData firearm_data{get;}
+    FirearmData FirearmData{get;}
     bool can_shoot{get;set;}
+    ReloadData getReloadData();
 }
