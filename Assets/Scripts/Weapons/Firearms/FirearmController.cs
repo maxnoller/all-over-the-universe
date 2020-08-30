@@ -19,10 +19,9 @@ public class FirearmController : NetworkBehaviour, IFirearmController
 
     void Start(){
         can_shoot = true;
-        if(firearm_data.ammo_per_magazine != 0 && hasAuthority){
-            reload_behaviour = GetComponent<ReloadBehaviour>();
-            reload_behaviour.Init(this);
-        }
+        if(firearm_data.ammo_per_magazine != 0)
+            reload_behaviour = (ReloadBehaviour)gameObject.AddComponent(typeof(ReloadBehaviour));
+        sound_behaviour = gameObject.GetComponent<SoundBehaviour>();
         RaycastController raycast_controller;
         raycast_controller = GetComponent<RaycastController>();
         raycast_controller.Init(this);    
