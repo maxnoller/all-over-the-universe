@@ -13,7 +13,8 @@ public class CameraController : MonoBehaviour
         if(local_player.isLocalPlayer){
             InputController.OnInputUpdate += ChangeRotation;
         } else {
-            gameObject.SetActive(false);
+            GetComponent<Camera>().enabled = false;
+            GetComponent<AudioListener>().enabled = false;
         }
     }
 

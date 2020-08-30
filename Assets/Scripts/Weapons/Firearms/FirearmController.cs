@@ -17,31 +17,26 @@ public class FirearmController : NetworkBehaviour, IFirearmController
     public bool can_shoot{get;set;}
     ReloadBehaviour reload_behaviour;
 
-    bool is_local_player = true;
-
     void Start(){
         can_shoot = true;
-        if(firearm_data.ammo_per_magazine != 0 && is_local_player){
+        if(firearm_data.ammo_per_magazine != 0 && hasAuthority){
             reload_behaviour = GetComponent<ReloadBehaviour>();
             reload_behaviour.Init(this);
         }
         RaycastController raycast_controller;
         raycast_controller = GetComponent<RaycastController>();
         raycast_controller.Init(this);    
+        OnEnable();
     }
 
     void OnEnable(){
-        if(is_local_player)
+        if(hasAuthority)
             InputController.OnInputUpdate += checkInput;
     }
 
     void OnDisable(){
-        if(is_local_player)
+        if(hasAuthority)
             InputController.OnInputUpdate -= checkInput;
-    }
-
-    void Init(bool is_local_player){
-        this.is_local_player = is_local_player;
     }
 
     void checkInput(IInputData input_data){

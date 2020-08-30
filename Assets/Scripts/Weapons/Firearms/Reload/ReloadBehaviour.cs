@@ -39,7 +39,8 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
     }
 
     void OnDisable(){
-        firearm_controller.OnBulletShot -= handleShot;
+        if(firearm_controller != null)
+            firearm_controller.OnBulletShot -= handleShot;
         if(has_magazines)
             InputController.OnInputUpdate -= handleReload;
     }

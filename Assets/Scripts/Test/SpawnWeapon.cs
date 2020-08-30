@@ -17,6 +17,7 @@ public class SpawnWeapon : NetworkBehaviour {
 
     [Command]
     public void CmdSpawnWeapon(){
+        Debug.Log("Spawning Weapon for player: "+GetComponent<Player>().username);
         GameObject weapon_object = Instantiate(weapon);
         weapon_object.transform.parent = transform;
         NetworkServer.Spawn(weapon_object, GetComponent<NetworkIdentity>().connectionToClient);

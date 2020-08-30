@@ -6,34 +6,39 @@ using Mirror;
 public class RaycastController : NetworkBehaviour {
     FirearmController firearm_controller;
     Transform player_camera_transform;
+    NetworkPoolController object_pool_controller;
 
     public void Init(FirearmController firearm_controller){
         this.firearm_controller = firearm_controller;
         this.player_camera_transform = transform.parent.GetChild(0).transform;
+        this.object_pool_controller = GameObject.Find("ObjectPool").GetComponent<NetworkPoolController>();
         this.OnEnable();
     }
 
     void OnEnable(){
-        if(firearm_controller != null)
+        if(firearm_controller != null && hasAuthority)
             firearm_controller.OnBulletShot += processShot;
     }
 
     void OnDisable(){
-        if(firearm_controller != null)
+        if(firearm_controller != null && hasAuthority)
             firearm_controller.OnBulletShot -= processShot;
     }
 
     public void processShot(){
+        Debug.Log(hasAuthority);
         Cmd_performRaycast();
     }
 
     [Command]
     public void Cmd_performRaycast(){
+        Debug.Log(player_camera_transform.position+"   "+player_camera_transform.forward);
         RaycastHit hit;
         if(Physics.Raycast(player_camera_transform.position,
                            player_camera_transform.forward,
                            out hit)){
             if(hit.transform == transform.parent) return;
+            object_pool_controller.RpcOrderObject("bullethole", hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
             IDamageable hit_damage = hit.transform.GetComponent<IDamageable>();
             if(hit_damage != null){
                 hit_damage.takeDamage(firearm_controller.FirearmData.damage);
