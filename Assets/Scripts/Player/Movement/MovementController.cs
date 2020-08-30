@@ -16,7 +16,7 @@ public class MovementController : MonoBehaviour {
     void Move(IInputData input_model){
         checkForRunAndSneak(input_model);
         Vector3 direction = 
-            transform.TransformDirection(this.Calculate(input_model));
+            transform.TransformDirection(this.calculate(input_model));
         character_controller.Move(direction);   
     }
     
@@ -27,7 +27,7 @@ public class MovementController : MonoBehaviour {
             movement_modifier = movement_model.sneakSpeedModifier;
     }
 
-    Vector3 Calculate(IInputData input_model){
+    Vector3 calculate(IInputData input_model){
         float delta_time = input_model.delta_time;
         float movement_multiplier = movement_model.speed * delta_time * movement_modifier;
         float x = input_model.axis_horizontal * movement_multiplier;

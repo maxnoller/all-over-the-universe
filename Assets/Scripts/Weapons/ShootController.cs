@@ -9,10 +9,15 @@ public class ShootController : MonoBehaviour, IUseable {
     public bool can_shoot;
     private float next_fire;
 
-    void Start(){
-        InputController.OnInputUpdate += checkUse;
+    void OnEnable(){
+        if(InputController.OnInputUpdate != null)
+            InputController.OnInputUpdate += checkUse;
     }
 
+    void OnDisable(){
+        if(InputController.OnInputUpdate != null)
+            InputController.OnInputUpdate -= checkUse;
+    }
     public void checkUse(IInputData input_data){
         if(input_data.has_used)
             use();
