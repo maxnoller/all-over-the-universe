@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReloadBehaviour : IBehaviour{
+public class ReloadBehaviour : MonoBehaviour{
     IFirearmController firearm_controller;
     public int ammo_in_magazine{get;private set;}
     public int total_ammo{get;private set;}
