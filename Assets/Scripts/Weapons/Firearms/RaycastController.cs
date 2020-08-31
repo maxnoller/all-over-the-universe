@@ -26,13 +26,11 @@ public class RaycastController : NetworkBehaviour {
     }
 
     public void processShot(){
-        Debug.Log(hasAuthority);
         Cmd_performRaycast();
     }
 
     [Command]
     public void Cmd_performRaycast(){
-        Debug.Log(player_camera_transform.position+"   "+player_camera_transform.forward);
         RaycastHit hit;
         if(Physics.Raycast(player_camera_transform.position,
                            player_camera_transform.forward,

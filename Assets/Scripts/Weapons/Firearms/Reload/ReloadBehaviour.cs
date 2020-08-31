@@ -16,7 +16,9 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
     bool is_reloading = false;
 
     //Events
-    public static event Action<IReloadModel> OnReload = delegate { };
+    public event Action<IReloadModel> OnReload = delegate { };
+    public static event Action<IReloadModel> OnAmmoChange = delegate { };
+
 
     //Init method
     public void Init(IFirearmController firearm_controller){
@@ -27,7 +29,12 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
             ammo_in_magazine = this.reload_data.ammo_per_magazine;
         }
         total_ammo = reload_data.total_ammo;
+        this.OnReload += callAmmoChange;
         this.OnEnable();
+    }
+
+    void callAmmoChange(IReloadModel reload_model){
+        OnAmmoChange(this);
     }
 
     void OnEnable() {
@@ -35,7 +42,7 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
             firearm_controller.OnBulletShot += handleShot;
         if(has_magazines)
             InputController.OnInputUpdate += handleReload;
-        OnReload(this);
+        OnAmmoChange(this);
     }
 
     void OnDisable(){
@@ -52,13 +59,14 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
         } else {
             ammo_in_magazine--;
         }
-        OnReload(this);
+        OnAmmoChange(this);
         if(total_ammo <= 0 || ammo_in_magazine <= 0)
             firearm_controller.can_shoot = false;
     }
 
     //Reload method, changes ammo etc
     void reload(){
+        OnReload(this);
         is_reloading = true;
         firearm_controller.can_shoot = false;
         int difference = reload_data.ammo_per_magazine-ammo_in_magazine;
@@ -72,7 +80,7 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
         yield return new WaitForSeconds(seconds);
         this.firearm_controller.can_shoot = true;
         is_reloading = false;
-        OnReload(this);
+        OnAmmoChange(this);
     }
 
     //Checks input data if reload was pressed

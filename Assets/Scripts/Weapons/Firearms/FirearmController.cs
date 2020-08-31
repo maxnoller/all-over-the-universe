@@ -16,12 +16,20 @@ public class FirearmController : NetworkBehaviour, IFirearmController
 
     public bool can_shoot{get;set;}
     ReloadBehaviour reload_behaviour;
+    SoundBehaviour sound_behaviour;
 
     void Start(){
         can_shoot = true;
-        if(firearm_data.ammo_per_magazine != 0)
-            reload_behaviour = (ReloadBehaviour)gameObject.AddComponent(typeof(ReloadBehaviour));
+        if(firearm_data.ammo_per_magazine != 0){
+            reload_behaviour = gameObject.GetComponent<ReloadBehaviour>();
+            reload_behaviour.Init(this);
+        }
         sound_behaviour = gameObject.GetComponent<SoundBehaviour>();
+        Dictionary<string, AudioClip> audio_clips = new Dictionary<string, AudioClip>();
+        audio_clips["shot"] = firearm_data.shot_audio_clip;
+        audio_clips["reload"] = firearm_data.reload_audio_clip;
+
+        sound_behaviour.init(this, reload_behaviour, audio_clips);
         RaycastController raycast_controller;
         raycast_controller = GetComponent<RaycastController>();
         raycast_controller.Init(this);    

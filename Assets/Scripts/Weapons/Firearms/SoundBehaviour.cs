@@ -17,6 +17,7 @@ public class SoundBehaviour : NetworkBehaviour {
         this.reload_behaviour = reload_behaviour;
         this.audio_clips = clips;
         audio_source = addAudioSource();
+        OnEnable();
     }
 
 
@@ -35,10 +36,12 @@ public class SoundBehaviour : NetworkBehaviour {
     }
 
     void handleShot(){
-        RpcPlayAudio("shot");
+        CmdPlayAudio("shot");
+        Debug.Log("shot");
     }
-    void handleReload(ReloadBehaviour reload_behaviour){
+    void handleReload(IReloadModel reload_behaviour){
         CmdPlayAudio("reload");
+        Debug.Log("reload");
     }
     [Command]
     public void CmdPlayAudio(string clip_name){

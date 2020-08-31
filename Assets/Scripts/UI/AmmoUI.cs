@@ -13,12 +13,12 @@ public class AmmoUI : MonoBehaviour {
 
     void OnEnable(){
         if(ammoText != null)
-            ReloadBehaviour.OnReload += handleAmmoChange;
+            ReloadBehaviour.OnAmmoChange += handleAmmoChange;
     }
 
     void OnDisable(){
         if(ammoText != null)
-            ReloadBehaviour.OnReload -= handleAmmoChange;
+            ReloadBehaviour.OnAmmoChange -= handleAmmoChange;
     }
 
     void handleAmmoChange(IReloadModel reload_model){
