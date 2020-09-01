@@ -19,9 +19,9 @@ MonoBehaviour:
   total_ammo: 100
   ammo_per_magazine: 15
   reload_time: 1
-  shot_audio_clip: {fileID: 0}
+  shot_audio_clip: {fileID: 8300000, guid: 3d9f1d6df03a49a458ee051fc55f9a36, type: 3}
   shot_audio_volume: 1
   shot_animation: 
-  reload_audio_clip: {fileID: 0}
+  reload_audio_clip: {fileID: 8300000, guid: e740c9fa5fd939343882108d4c976730, type: 3}
   reload_audio_volume: 1
   reload_animation: 
