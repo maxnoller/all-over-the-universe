@@ -13,10 +13,14 @@ public class UnityService : IUnityService
     public bool GetButton(string buttonName){
         return Input.GetButton(buttonName);
     }
+    public bool GetButtonDown(string buttonName){
+        return Input.GetButtonDown(buttonName);
+    }
 }
 
 interface IUnityService{
     float GetDeltaTime();
     float GetAxis(string axisName);
     bool GetButton(string buttonName);
+    bool GetButtonDown(string buttonName);
 }

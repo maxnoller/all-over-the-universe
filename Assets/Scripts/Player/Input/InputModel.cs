@@ -19,6 +19,7 @@ public class InputModel : IInputData{
     public bool has_used{get;set;}
     public bool has_used_secondary{get;set;}
     public bool has_reloaded{get;set;}
+    public bool pressed_escape{get;set;}
 
     public InputModel(){
         this.axis_horizontal = 0f;

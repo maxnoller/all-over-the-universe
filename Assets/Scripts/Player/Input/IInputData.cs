@@ -19,4 +19,6 @@ public interface IInputData {
     bool has_used{get;set;}
     bool has_reloaded{get;set;}
     bool has_used_secondary{get;set;}
+
+    bool pressed_escape{get;set;}
 }

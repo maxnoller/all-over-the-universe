@@ -151,6 +151,7 @@ GameObject:
   - component: {fileID: 8229838034395808871}
   - component: {fileID: 9129156224871256087}
   - component: {fileID: 5220397233989841135}
+  - component: {fileID: -4501590309150870119}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -357,3 +358,15 @@ MonoBehaviour:
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
   target: {fileID: 3446180160952216434}
+--- !u!114 &-4501590309150870119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3446180162633599094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfcb38c1840ab04cb36ad96398ec8d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
