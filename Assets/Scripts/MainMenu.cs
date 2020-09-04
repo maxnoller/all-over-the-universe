@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     Application application; 
     NetworkManager manager;
     InputField adress_inputField;
+    InputField portInputField;
     string username;
 
     public GameObject select_server;
@@ -24,6 +25,10 @@ public class MainMenu : MonoBehaviour
     public void host_server(){
         if(!NetworkClient.isConnected && !NetworkServer.active)
         {
+            ushort port = 7777;
+            if(portInputField.text == "" || !ushort.TryParse(portInputField.text, out port))
+                Debug.Log("Could not parse port resorting to default port");
+            manager.GetComponent<TelepathyTransport>().port = port;
             manager.StartHost();
             application.username = username;
             gameObject.SetActive(false);
@@ -35,7 +40,12 @@ public class MainMenu : MonoBehaviour
         {
             application.username = username;
             if(adress_inputField.text != ""){
-                manager.networkAddress = adress_inputField.text;
+                string[] split_string = adress_inputField.text.Split(':');
+                if(split_string.Length > 1){
+                    manager.GetComponent<TelepathyTransport>().port = ushort.Parse(split_string[1]);
+                }
+
+                manager.networkAddress = split_string[0];
             } else {
                 manager.networkAddress = "localhost";
             }
@@ -59,8 +69,13 @@ public class MainMenu : MonoBehaviour
     public void set_username(){
         username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
         username_object.SetActive(false);
+        initSelectServer();
+    }
+
+    public void initSelectServer(){
         select_server.SetActive(true);
         adress_inputField = GameObject.Find("serverAdress_InputField").GetComponent<InputField>();
+        portInputField = GameObject.Find("PortInputField").GetComponent<InputField>();
     }
     
 }

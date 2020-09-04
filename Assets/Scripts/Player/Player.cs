@@ -39,5 +39,28 @@ public class Player : NetworkBehaviour
         this.player_model.username = GameObject.Find("NetworkManager").GetComponent<Application>().username;
         this.username = player_model.username;
     }
+
+    public void equip(GameObject item){
+        CmdGrantAuthority(item);
+        CmdSetParent(item);
+        Destroy(item.GetComponent<Rigidbody>());
+        item.GetComponent<IEquipable>().equip(gameObject);
+    }
+
+    [Command]
+    public void CmdSetParent(GameObject item){
+        item.transform.parent = camera_controller.transform;
+        RpcChangeParent(item);
+    }
+
+    [ClientRpc]
+    public void RpcChangeParent(GameObject item){
+        item.transform.parent = camera_controller.transform;
+    }
     
+    [Command]
+    void CmdGrantAuthority(GameObject target)
+    {
+        target.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
+    }
 }

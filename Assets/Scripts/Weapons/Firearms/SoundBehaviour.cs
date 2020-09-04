@@ -22,27 +22,35 @@ public class SoundBehaviour : NetworkBehaviour {
 
 
     void OnEnable(){
-        if(firearm_controller != null)
+        if(firearm_controller != null){
             firearm_controller.OnBulletShot += handleShot;
+            firearm_controller.OnEquip += handleEquip;
+        }
         if(reload_behaviour != null)
             reload_behaviour.OnReload += handleReload;
     }
 
     void OnDisable(){
-        if(firearm_controller != null)
+        if(firearm_controller != null){
             firearm_controller.OnBulletShot -= handleShot;
+            firearm_controller.OnEquip -= handleEquip;
+        }
         if(reload_behaviour != null)
             reload_behaviour.OnReload -= handleReload;
     }
 
     void handleShot(){
         CmdPlayAudio("shot");
-        Debug.Log("shot");
     }
+
     void handleReload(IReloadModel reload_behaviour){
         CmdPlayAudio("reload");
-        Debug.Log("reload");
     }
+
+    void handleEquip(){
+        CmdPlayAudio("equip");
+    }
+
     [Command]
     public void CmdPlayAudio(string clip_name){
         RpcPlayAudio(clip_name);

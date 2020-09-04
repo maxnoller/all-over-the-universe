@@ -21,4 +21,5 @@ public interface IInputData {
     bool has_used_secondary{get;set;}
 
     bool pressed_escape{get;set;}
+    bool has_interacted{get;set;}
 }

@@ -10,8 +10,13 @@ public class RaycastController : NetworkBehaviour {
 
     public void Init(FirearmController firearm_controller){
         this.firearm_controller = firearm_controller;
-        this.player_camera_transform = transform.parent.GetChild(0).transform;
+        this.player_camera_transform = transform.parent;
         this.object_pool_controller = GameObject.Find("ObjectPool").GetComponent<NetworkPoolController>();
+        this.OnEnable();
+    }
+
+    override
+    public void OnStartAuthority(){
         this.OnEnable();
     }
 
@@ -41,6 +46,7 @@ public class RaycastController : NetworkBehaviour {
             if(hit_damage != null){
                 hit_damage.takeDamage(firearm_controller.FirearmData.damage);
             }
+            Debug.DrawLine (transform.position, hit.point, Color.cyan, 10);
         }
     }
 }

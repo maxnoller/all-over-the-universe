@@ -20,4 +20,8 @@ public class FirearmData : ScriptableObject {
     public AudioClip reload_audio_clip;
     public float reload_audio_volume = 1f;
     public string reload_animation;
+    public AudioClip equip_audio_clip;
+
+    public Vector3 local_position;
+    public Quaternion local_rotation;
 }

@@ -30,6 +30,7 @@ public class InputController : NetworkBehaviour
         this.input_model.has_used = unityService.GetButton("Fire1");
         this.input_model.has_used_secondary = unityService.GetButton("Fire2");
         this.input_model.has_reloaded = unityService.GetButton("Reload");
+        this.input_model.has_interacted = unityService.GetButton("Interact");
 
         if(input_model.input_frozen){
             input_model.axis_horizontal = 0;
@@ -40,6 +41,7 @@ public class InputController : NetworkBehaviour
             input_model.has_reloaded = false;
             input_model.has_used = false;
             input_model.has_used_secondary = false;
+            input_model.has_interacted = false;
         }
         
         OnInputUpdate(this.input_model);
