@@ -9,8 +9,16 @@ public class HealthBar : MonoBehaviour
 
     void Start(){
         this.health_slider = GetComponent<Slider>();
-        HealthController.OnPlayerHealthChanged += updateHealthBar;
+        OnEnable();
     }   
+
+    void OnEnable(){
+        HealthController.OnPlayerHealthChanged += updateHealthBar;
+    }
+
+    void OnDisable(){
+        HealthController.OnPlayerHealthChanged -= updateHealthBar;
+    }
    
    void updateHealthBar(int value){
        this.health_slider.value = value;

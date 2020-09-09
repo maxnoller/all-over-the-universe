@@ -7,11 +7,13 @@ public class RaycastController : NetworkBehaviour {
     FirearmController firearm_controller;
     Transform player_camera_transform;
     NetworkPoolController object_pool_controller;
+    Player local_player; //TODO: somehow rework this this is disgusting
 
-    public void Init(FirearmController firearm_controller){
+    public void Init(FirearmController firearm_controller, GameObject player){
         this.firearm_controller = firearm_controller;
-        this.player_camera_transform = transform.parent;
+        this.player_camera_transform = player.GetComponent<Player>().camera_controller.transform;
         this.object_pool_controller = GameObject.Find("ObjectPool").GetComponent<NetworkPoolController>();
+        local_player = player_camera_transform.parent.GetComponent<Player>();
         this.OnEnable();
     }
 
@@ -41,10 +43,10 @@ public class RaycastController : NetworkBehaviour {
                            player_camera_transform.forward,
                            out hit)){
             if(hit.transform == transform.parent) return;
-            object_pool_controller.RpcOrderObject("bullethole", hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
+            object_pool_controller.RpcOrderObject("bullethole", hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal), hit.transform);
             IDamageable hit_damage = hit.transform.GetComponent<IDamageable>();
             if(hit_damage != null){
-                hit_damage.takeDamage(firearm_controller.FirearmData.damage);
+                hit_damage.registerHit(firearm_controller.FirearmData.damage, local_player);
             }
             Debug.DrawLine (transform.position, hit.point, Color.cyan, 10);
         }

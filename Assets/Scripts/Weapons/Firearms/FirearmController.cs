@@ -52,20 +52,17 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
         return new ReloadData(this.firearm_data);
     }
 
-    public void equip(GameObject parent){
-        this.init();
+    public void equip(GameObject player){
+        this.init(player);
         transform.localPosition = firearm_data.local_position;
         transform.localRotation = firearm_data.local_rotation;
-
-        if(isLocalPlayer)
-            gameObject.layer = 8;
     }
 
-    public void init(){
+    public void init(GameObject player){
         can_shoot = true;
         initReloadBehaviour();
         initSoundBehaviour();
-        initRaycastController();
+        initRaycastController(player);
         OnEnable();
     }
 
@@ -79,10 +76,10 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
         sound_behaviour.init(this, reload_behaviour, audio_clips);
     }
 
-    void initRaycastController(){
+    void initRaycastController(GameObject player){
         RaycastController raycast_controller;
         raycast_controller = GetComponent<RaycastController>();
-        raycast_controller.Init(this);    
+        raycast_controller.Init(this,player);    
     }
 
     void initReloadBehaviour(){

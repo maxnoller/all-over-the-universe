@@ -11,14 +11,17 @@ public class NetworkPoolController : NetworkBehaviour {
         local_object_pool = gameObject.GetComponent<ObjectPool>();
     }
 
-
     [ClientRpc]
-    public void RpcOrderObject(string tag, Vector3 position, Quaternion rotation){
-        local_object_pool.SpawnFromPool(tag, position, rotation);
+    public void RpcOrderObject(string tag, Vector3 position, Quaternion rotation, Transform parent){
+        GameObject bullethole = local_object_pool.SpawnFromPool(tag, position, rotation);
+        if(parent != null)
+            bullethole.transform.parent = parent;
+        else
+            bullethole.transform.parent = transform;
     }
 
     [Command]
-    public void CmdOrderObject(string tag, Vector3 position, Quaternion rotation){
-        RpcOrderObject(tag, position, rotation);
+    public void CmdOrderObject(string tag, Vector3 position, Quaternion rotation, Transform parent){
+        RpcOrderObject(tag, position, rotation, parent);
     }
 }

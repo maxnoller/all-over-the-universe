@@ -22,6 +22,9 @@ public class Player : NetworkBehaviour
         health = GetComponent<HealthController>();
 
         setupLocalPlayer();
+
+        if(!isServer) return;
+        GameObject.Find("GameLogic").GetComponent<GameLogic>().registerPlayer(this);
     }
 
     void setupLocalPlayer(){

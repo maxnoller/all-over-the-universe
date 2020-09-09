@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IDamageable{
-    void takeDamage(int amount);
+    void registerHit(int amount, Player hit_origin);
 }
