@@ -1,17 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class RaycastController : NetworkBehaviour {
-    FirearmController firearm_controller;
-    Transform player_camera_transform;
-    NetworkPoolController object_pool_controller;
+public class ShootBehaviour : NetworkBehaviour {
+    
+    public event Action OnBulletShot = delegate { };
 
-    public void Init(FirearmController firearm_controller){
+    ShootData shoot_data;
+
+    Transform player_camera_transform;
+
+    NetworkPoolController object_pool_controller;
+    FirearmController firearm_controller;
+
+    //timestamp when the next bullet can be fired from this weapon
+    float next_fire;
+
+    public void init(FirearmController firearm_controller, ShootData shoot_data){
         this.firearm_controller = firearm_controller;
         this.player_camera_transform = transform.parent;
         this.object_pool_controller = GameObject.Find("ObjectPool").GetComponent<NetworkPoolController>();
+        this.shoot_data = shoot_data;
         this.OnEnable();
     }
 
@@ -21,21 +32,32 @@ public class RaycastController : NetworkBehaviour {
     }
 
     void OnEnable(){
-        if(firearm_controller != null && hasAuthority)
-            firearm_controller.OnBulletShot += processShot;
+        if(hasAuthority)
+            InputController.OnInputUpdate += handleInput;
     }
 
     void OnDisable(){
-        if(firearm_controller != null && hasAuthority)
-            firearm_controller.OnBulletShot -= processShot;
+        if(hasAuthority)
+            InputController.OnInputUpdate -= handleInput;
     }
 
-    public void processShot(){
-        Cmd_performRaycast();
+    public void handleInput(IInputData input_data){
+        if((shoot_data.fire_mode == ShootData.FireMode.semi && input_data.has_used)
+            || (shoot_data.fire_mode == ShootData.FireMode.full && input_data.has_used_down)){
+            tryShoot();
+        }
+    }
+
+    public void tryShoot(){
+        if(firearm_controller.can_shoot && Time.time >= next_fire){
+            next_fire = Time.time + 1f/shoot_data.fire_rate;
+            OnBulletShot();
+            CmdPerformRaycast();
+        }
     }
 
     [Command]
-    public void Cmd_performRaycast(){
+    public void CmdPerformRaycast(){
         RaycastHit hit;
         if(Physics.Raycast(player_camera_transform.position,
                            player_camera_transform.forward,
@@ -49,4 +71,6 @@ public class RaycastController : NetworkBehaviour {
             Debug.DrawLine (transform.position, hit.point, Color.cyan, 10);
         }
     }
+
+
 }

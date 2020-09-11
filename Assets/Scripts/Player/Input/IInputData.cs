@@ -17,6 +17,7 @@ public interface IInputData {
     float delta_time{get;set;}
     
     bool has_used{get;set;}
+    bool has_used_down{get;set;}
     bool has_reloaded{get;set;}
     bool has_used_secondary{get;set;}
 

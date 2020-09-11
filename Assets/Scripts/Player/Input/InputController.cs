@@ -28,6 +28,7 @@ public class InputController : NetworkBehaviour
         this.input_model.sneak_button = unityService.GetButton("Sneak");
         this.input_model.jump_button = unityService.GetButton("Jump");
         this.input_model.has_used = unityService.GetButton("Fire1");
+        this.input_model.has_used_down = unityService.GetButtonDown("Fire1");
         this.input_model.has_used_secondary = unityService.GetButton("Fire2");
         this.input_model.has_reloaded = unityService.GetButton("Reload");
         this.input_model.has_interacted = unityService.GetButton("Interact");

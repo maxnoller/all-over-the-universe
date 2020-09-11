@@ -24,4 +24,6 @@ public class FirearmData : ScriptableObject {
 
     public Vector3 local_position;
     public Quaternion local_rotation;
+
+    public ShootData shoot_data;
 }

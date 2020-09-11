@@ -5,14 +5,10 @@ using Mirror;
 
 public class WeaponManager : NetworkBehaviour{
     List<GameObject> weapons;
-    RaycastController raycast_controller;
     Player local_player;
 
     void Init(Player local_player){
         this.local_player = local_player;
-    }
-    void Start(){
-        raycast_controller = GetComponent<RaycastController>();
     }
 
     [Command]
