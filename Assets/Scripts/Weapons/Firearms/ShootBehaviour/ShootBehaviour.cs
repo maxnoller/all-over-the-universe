@@ -42,6 +42,7 @@ public class ShootBehaviour : NetworkBehaviour {
     }
 
     public void handleInput(IInputData input_data){
+        if(shoot_data == null) return;
         if((shoot_data.fire_mode == ShootData.FireMode.semi && input_data.has_used)
             || (shoot_data.fire_mode == ShootData.FireMode.full && input_data.has_used_down)){
             tryShoot();

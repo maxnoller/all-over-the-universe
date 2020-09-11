@@ -32,16 +32,13 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
         this.init();
         transform.localPosition = firearm_data.local_position;
         transform.localRotation = firearm_data.local_rotation;
-
-        if(isLocalPlayer)
-            gameObject.layer = 8;
     }
 
     public void init(){
+        initSoundBehaviour();
         can_shoot = true;
         initShootBehaviour();
         initReloadBehaviour();
-        initSoundBehaviour();
     }
 
     void initSoundBehaviour(){

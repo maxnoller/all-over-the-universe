@@ -4,29 +4,95 @@ using UnityEngine;
 using Mirror;
 
 public class WeaponManager : NetworkBehaviour{
-    List<GameObject> weapons;
+    GameObject[] weapons = new GameObject[8];
     Player local_player;
 
-    void Init(Player local_player){
+    public void init(Player local_player){
         this.local_player = local_player;
     }
 
     [Command]
-    void Cmd_RegisterWeapon(GameObject weapon){
-        GameObject weapon_object = Instantiate(weapon);
-        weapon_object.transform.parent = local_player.transform;
-        NetworkServer.Spawn(weapon_object);
-        this.weapons.Add(weapon_object);
-        Target_RegisterWeapon(weapon_object);
+    public void CmdRegisterWeapon(GameObject weapon){
+        IEquipable weapon_equip = weapon.GetComponent<IEquipable>();
+        if(weapon_equip == null){
+            Debug.LogError("Trying to register unequipable weapon");
+            return;
+        }
+        CmdGrantAuthority(weapon);
+        CmdSetParent(weapon);
+        weapon_equip.equip(gameObject);
+        RpcEquipWeapon(weapon); 
+        addWeapon(weapon);
+        Debug.Log("Registering Weapon");
     }
 
-    [TargetRpc]
-    void Target_RegisterWeapon(GameObject weapon){
-        this.weapons.Add(weapon);
+    [ClientRpc]
+    void RpcEquipWeapon(GameObject weapon){
+        weapon.GetComponent<IEquipable>().equip(gameObject);
+        if(isLocalPlayer)
+            addWeapon(weapon);
     }
 
     [Command]
-    void Cmd_UnregisetrWeapon(GameObject weapon){
-        
+    void CmdUnregisterWeapon(GameObject weapon){
+        removeWeapon(weapon);
+        RpcUnregisterWeapon(weapon);
+    }
+
+    [ClientRpc]
+    void RpcUnregisterWeapon(GameObject weapon){
+        removeWeapon(weapon);
+    }
+
+    [Command]
+    public void CmdSetParent(GameObject item){
+        item.transform.parent = local_player.camera_controller.transform;
+        RpcChangeParent(item);
+    }
+
+    [ClientRpc]
+    public void RpcChangeParent(GameObject item){
+        item.transform.parent = local_player.camera_controller.transform;
+    }
+    
+    [Command]
+    void CmdGrantAuthority(GameObject target)
+    {
+        target.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
+    }
+
+    int getWeaponIndex(GameObject element){
+        for(int i = 0; i<weapons.Length; i++){
+            if(weapons[i] == element){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    void removeWeapon(GameObject weapon){
+        int idx = getWeaponIndex(weapon);
+        if(idx==-1){
+            Debug.LogError("Trying to remove non existent weapon from array");
+            return;
+        }
+        weapons[idx] = null;
+    }
+
+    void addWeapon(GameObject weapon){
+        int slot = firstFreeSlotIndex(weapon);
+        if(slot==-1){
+            Debug.LogWarning("No free weapon slot");
+            return;
+        }
+        weapons[slot] = weapon;
+    }
+
+    int firstFreeSlotIndex(GameObject weapon){
+        for(int i = 0; i<weapons.Length;i++){
+            if(weapons[i] == null)
+                return i;
+        }
+        return -1;
     }
 }

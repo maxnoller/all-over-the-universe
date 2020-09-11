@@ -22,7 +22,7 @@ public class SoundBehaviour : NetworkBehaviour {
 
 
     void OnEnable(){
-        if(firearm_controller != null){
+        if(firearm_controller != null && firearm_controller.shoot_behaviour != null){
             firearm_controller.shoot_behaviour.OnBulletShot += handleShot;
             firearm_controller.OnEquip += handleEquip;
         }
