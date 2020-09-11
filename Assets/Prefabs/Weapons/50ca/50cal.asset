@@ -28,3 +28,4 @@ MonoBehaviour:
   equip_audio_clip: {fileID: 8300000, guid: 2f446010aed5e50489049226fc5d3bd3, type: 3}
   local_position: {x: 1.38, y: -0.99, z: 1.75}
   local_rotation: {x: -0.04379847, y: -0.6228419, z: 0.043076362, w: 0.77993214}
+  shoot_data: {fileID: 11400000, guid: d27c59f15f5a4454e9a8a6683cd5c773, type: 2}

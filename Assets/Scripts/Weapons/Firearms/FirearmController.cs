@@ -12,7 +12,7 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
     }
 
     //Events
-    public event Action OnBulletShot = delegate { };
+    public ShootBehaviour shoot_behaviour{get;set;}
     public event Action OnEquip = delegate { };
 
     public bool can_shoot{get;set;}
@@ -62,8 +62,7 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
     }
 
     void initShootBehaviour(){
-        ShootBehaviour shoot_behaviour;
-        shoot_behaviour = GetComponent<ShootBehaviour>();
+        this.shoot_behaviour = GetComponent<ShootBehaviour>();
         shoot_behaviour.init(this, firearm_data.shoot_data);
     }
 }

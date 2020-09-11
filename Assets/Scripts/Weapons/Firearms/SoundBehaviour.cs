@@ -23,7 +23,7 @@ public class SoundBehaviour : NetworkBehaviour {
 
     void OnEnable(){
         if(firearm_controller != null){
-            firearm_controller.OnBulletShot += handleShot;
+            firearm_controller.shoot_behaviour.OnBulletShot += handleShot;
             firearm_controller.OnEquip += handleEquip;
         }
         if(reload_behaviour != null)
@@ -32,7 +32,7 @@ public class SoundBehaviour : NetworkBehaviour {
 
     void OnDisable(){
         if(firearm_controller != null){
-            firearm_controller.OnBulletShot -= handleShot;
+            firearm_controller.shoot_behaviour.OnBulletShot -= handleShot;
             firearm_controller.OnEquip -= handleEquip;
         }
         if(reload_behaviour != null)
