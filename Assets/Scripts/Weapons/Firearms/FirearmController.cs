@@ -12,7 +12,7 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
     }
 
     //Events
-    public event Action OnBulletShot = delegate { };
+    public ShootBehaviour shoot_behaviour{get;set;}
     public event Action OnEquip = delegate { };
 
     public bool can_shoot{get;set;}
@@ -21,31 +21,7 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
 
     override
     public void OnStartAuthority(){
-        this.OnEnable();
         this.OnEquip();
-    }
-
-    void OnEnable(){
-        if(hasAuthority)
-            InputController.OnInputUpdate += checkInput;
-    }
-
-    void OnDisable(){
-        if(hasAuthority)
-            InputController.OnInputUpdate -= checkInput;
-    }
-
-    void checkInput(IInputData input_data){
-        if(input_data.has_used){
-           shoot();
-        }
-    }
-    float next_fire;
-    void shoot(){
-        if(can_shoot && Time.time > next_fire){
-            next_fire = Time.time + 1f/firearm_data.fire_rate;
-            OnBulletShot();
-        }
     }
 
     public ReloadData getReloadData(){
@@ -58,12 +34,11 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
         transform.localRotation = firearm_data.local_rotation;
     }
 
-    public void init(GameObject player){
-        can_shoot = true;
-        initReloadBehaviour();
+    public void init(){
         initSoundBehaviour();
-        initRaycastController(player);
-        OnEnable();
+        can_shoot = true;
+        initShootBehaviour();
+        initReloadBehaviour();
     }
 
     void initSoundBehaviour(){
@@ -76,16 +51,15 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
         sound_behaviour.init(this, reload_behaviour, audio_clips);
     }
 
-    void initRaycastController(GameObject player){
-        RaycastController raycast_controller;
-        raycast_controller = GetComponent<RaycastController>();
-        raycast_controller.Init(this,player);    
-    }
-
     void initReloadBehaviour(){
         if(firearm_data.ammo_per_magazine != 0){
             reload_behaviour = gameObject.GetComponent<ReloadBehaviour>();
             reload_behaviour.Init(this);
         }
+    }
+
+    void initShootBehaviour(){
+        this.shoot_behaviour = GetComponent<ShootBehaviour>();
+        shoot_behaviour.init(this, firearm_data.shoot_data);
     }
 }

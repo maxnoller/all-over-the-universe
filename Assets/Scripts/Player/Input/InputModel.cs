@@ -17,6 +17,7 @@ public class InputModel : IInputData{
     public float delta_time{get;set;}
 
     public bool has_used{get;set;}
+    public bool has_used_down{get;set;}
     public bool has_used_secondary{get;set;}
     public bool has_reloaded{get;set;}
     public bool pressed_escape{get;set;}

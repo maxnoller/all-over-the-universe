@@ -43,7 +43,7 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
     void OnEnable() {
         if(!hasAuthority) return;
         if(firearm_controller != null)
-            firearm_controller.OnBulletShot += handleShot;
+            firearm_controller.shoot_behaviour.OnBulletShot += handleShot;
         if(has_magazines)
             InputController.OnInputUpdate += handleReload;
         this.OnReload += callAmmoChange;
@@ -53,7 +53,7 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
     void OnDisable(){
         if(!hasAuthority) return;
         if(firearm_controller != null)
-            firearm_controller.OnBulletShot -= handleShot;
+            firearm_controller.shoot_behaviour.OnBulletShot -= handleShot;
         if(has_magazines)
             InputController.OnInputUpdate -= handleReload;
         this.OnReload -= callAmmoChange;

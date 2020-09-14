@@ -11,6 +11,7 @@ public class Player : NetworkBehaviour
     public MovementController movement_controller;
     public CameraController camera_controller;
     public HealthController health;
+    WeaponManager weapon_manager;
     
     void Start()
     {
@@ -20,6 +21,8 @@ public class Player : NetworkBehaviour
         camera_controller.local_player = this;
 
         health = GetComponent<HealthController>();
+        weapon_manager = GetComponent<WeaponManager>();
+        weapon_manager.init(this);
 
         setupLocalPlayer();
 
@@ -44,26 +47,9 @@ public class Player : NetworkBehaviour
     }
 
     public void equip(GameObject item){
-        CmdGrantAuthority(item);
-        CmdSetParent(item);
         Destroy(item.GetComponent<Rigidbody>());
-        item.GetComponent<IEquipable>().equip(gameObject);
-    }
-
-    [Command]
-    public void CmdSetParent(GameObject item){
-        item.transform.parent = camera_controller.transform;
-        RpcChangeParent(item);
-    }
-
-    [ClientRpc]
-    public void RpcChangeParent(GameObject item){
-        item.transform.parent = camera_controller.transform;
-    }
-    
-    [Command]
-    void CmdGrantAuthority(GameObject target)
-    {
-        target.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
+        if(item.GetComponent<IEquipable>() != null){
+            weapon_manager.CmdRegisterWeapon(item);
+        }
     }
 }

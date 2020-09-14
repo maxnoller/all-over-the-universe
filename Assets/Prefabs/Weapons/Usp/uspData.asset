@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1d62bae4b94ee44e9637d89f4911f5d, type: 3}
-  m_Name: TestFirearm
+  m_Name: uspData
   m_EditorClassIdentifier: 
   damage: 5
   hit_force: 1
@@ -28,3 +28,4 @@ MonoBehaviour:
   equip_audio_clip: {fileID: 8300000, guid: 53bb889085dd0db45af16deac08f70a2, type: 3}
   local_position: {x: 1.38, y: -0.99, z: 1.75}
   local_rotation: {x: -0.04379847, y: -0.6228419, z: 0.043076362, w: 0.77993214}
+  shoot_data: {fileID: 11400000, guid: 4b91e6e453e3c1b4fa1b7d4083519dc3, type: 2}
