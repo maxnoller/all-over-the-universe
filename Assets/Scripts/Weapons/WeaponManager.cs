@@ -6,6 +6,7 @@ using Mirror;
 public class WeaponManager : NetworkBehaviour{
     GameObject[] weapons = new GameObject[8];
     Player local_player;
+    int currently_selected_weapon = -1;
 
     public void init(Player local_player){
         this.local_player = local_player;
@@ -29,8 +30,9 @@ public class WeaponManager : NetworkBehaviour{
     [ClientRpc]
     void RpcEquipWeapon(GameObject weapon){
         weapon.GetComponent<IEquipable>().equip(gameObject);
-        if(isLocalPlayer)
-            addWeapon(weapon);
+        if(isLocalPlayer){
+            select_weapon(addWeapon(weapon));
+        }
     }
 
     [Command]
@@ -79,13 +81,14 @@ public class WeaponManager : NetworkBehaviour{
         weapons[idx] = null;
     }
 
-    void addWeapon(GameObject weapon){
+    int addWeapon(GameObject weapon){
         int slot = firstFreeSlotIndex(weapon);
         if(slot==-1){
             Debug.LogWarning("No free weapon slot");
-            return;
+            return -1;
         }
         weapons[slot] = weapon;
+        return slot;
     }
 
     int firstFreeSlotIndex(GameObject weapon){
@@ -94,5 +97,17 @@ public class WeaponManager : NetworkBehaviour{
                 return i;
         }
         return -1;
+    }
+
+    void select_weapon(int idx){
+        if(idx == -1){
+            Debug.LogWarning("Trying to equip weapon from slot -1");
+            return; 
+        }
+        if(currently_selected_weapon != -1)
+            weapons[currently_selected_weapon].SetActive(false);
+        currently_selected_weapon = idx;
+        weapons[currently_selected_weapon].SetActive(true);
+
     }
 }
