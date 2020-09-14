@@ -29,7 +29,6 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
             ammo_in_magazine = this.reload_data.ammo_per_magazine;
         }
         total_ammo = reload_data.total_ammo;
-        this.OnReload += callAmmoChange;
         this.OnEnable();
     }
 
@@ -37,19 +36,27 @@ public class ReloadBehaviour : NetworkBehaviour, IReloadModel {
         OnAmmoChange(this);
     }
 
+    public override void OnStartAuthority(){
+        OnEnable();
+    }
+
     void OnEnable() {
+        if(!hasAuthority) return;
         if(firearm_controller != null)
             firearm_controller.OnBulletShot += handleShot;
         if(has_magazines)
             InputController.OnInputUpdate += handleReload;
+        this.OnReload += callAmmoChange;
         OnAmmoChange(this);
     }
 
     void OnDisable(){
+        if(!hasAuthority) return;
         if(firearm_controller != null)
             firearm_controller.OnBulletShot -= handleShot;
         if(has_magazines)
             InputController.OnInputUpdate -= handleReload;
+        this.OnReload -= callAmmoChange;
     }
 
     //method that gets called everytime a shot is fired to adjust ammo and block shots if there is no ammo left
