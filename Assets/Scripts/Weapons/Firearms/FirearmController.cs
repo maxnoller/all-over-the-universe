@@ -34,10 +34,10 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
         transform.localRotation = firearm_data.local_rotation;
     }
 
-    public void init(){
+    public void init(GameObject player){
         initSoundBehaviour();
         can_shoot = true;
-        initShootBehaviour();
+        initShootBehaviour(player);
         initReloadBehaviour();
     }
 
@@ -58,8 +58,8 @@ public class FirearmController : NetworkBehaviour, IFirearmController, IEquipabl
         }
     }
 
-    void initShootBehaviour(){
+    void initShootBehaviour(GameObject player){
         this.shoot_behaviour = GetComponent<ShootBehaviour>();
-        shoot_behaviour.init(this, firearm_data.shoot_data);
+        shoot_behaviour.init(this, firearm_data.shoot_data, player.GetComponent<Player>());
     }
 }

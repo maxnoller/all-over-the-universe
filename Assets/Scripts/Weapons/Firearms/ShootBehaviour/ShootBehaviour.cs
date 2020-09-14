@@ -14,13 +14,15 @@ public class ShootBehaviour : NetworkBehaviour {
 
     NetworkPoolController object_pool_controller;
     FirearmController firearm_controller;
+    Player local_player;
 
     //timestamp when the next bullet can be fired from this weapon
     float next_fire;
 
-    public void init(FirearmController firearm_controller, ShootData shoot_data){
+    public void init(FirearmController firearm_controller, ShootData shoot_data, Player local_player){
         this.firearm_controller = firearm_controller;
-        this.player_camera_transform = player.GetComponent<Player>().camera_controller.transform;
+        this.local_player = local_player;
+        this.player_camera_transform = local_player.camera_controller.transform;
         this.object_pool_controller = GameObject.Find("ObjectPool").GetComponent<NetworkPoolController>();
         this.shoot_data = shoot_data;
         this.OnEnable();
